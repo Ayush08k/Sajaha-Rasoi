@@ -1,118 +1,64 @@
-Saajha Rasoi (The Shared Kitchen)
-Tagline: Your Surplus, Their Staple. Waste Less, Earn More.
+# 🥘 Saajha Rasoi (The Shared Kitchen)
 
-📢 Project Overview		   
-This project is a submission for Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food.
+**Tagline:** *Your Surplus, Their Staple. Waste Less, Earn More.*
 
-Current Time & Location: Saturday, July 26, 2025, 8:50 PM IST, Kharkhoda, Haryana, India.
+A submission for **Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food.**
 
-The Problem
-India's vibrant street food economy faces a critical, often overlooked challenge: the daily sourcing of raw materials. Street food vendors operate on thin margins, and any unsold perishable goods at the end of the day—like chopped vegetables, paneer, or prepared batters—translate directly into financial loss and food waste. Simultaneously, another nearby vendor might be running low on that exact item, forcing them to close early or make a costly trip to a distant market.
+📍 **Current Location:** Kharkhoda, Haryana, India  
+📅 **Date:** Saturday, July 26, 2025  
+🕗 **Time:** 8:50 PM IST  
 
-The Solution: Saajha Rasoi
-Saajha Rasoi is a mobile-first web application designed to tackle this inefficiency head-on. It creates a hyper-local, peer-to-peer marketplace where vendors can sell their surplus perishable materials to other vendors in their immediate vicinity. This creates a win-win-win scenario:
+---
 
-Sellers recover costs on items that would have been wasted.
+## 🚩 Problem Statement
 
-Buyers source urgently needed materials quickly and at a discounted price.
+India’s thriving street food ecosystem faces a silent but severe issue—**daily food waste due to unsold perishable materials.** Vendors operate on razor-thin margins, and any leftover prepared food or ingredients (like paneer, chopped veggies, dosa batter) often go to waste, leading to financial and material loss. Meanwhile, another vendor nearby might be in desperate need of those exact items.
 
-The community benefits from reduced food waste.
+---
 
-✨ Key Features
-Real-time Map View: A (simulated) live map showing available surplus items nearby for instant discovery.
+## 💡 The Solution — *Saajha Rasoi*
 
-Simple Anonymous Login: Quick access to the app without complex registration, perfect for the target audience.
+**Saajha Rasoi** is a **mobile-first web application** designed to solve this hyper-local inefficiency. It provides a platform where **street food vendors can buy and sell surplus perishables** in real-time within their neighborhood.
 
-Effortless Listing Creation: A guided, multi-step form using Angular Material Stepper to post surplus items in under a minute.
+### 🔁 Win-Win-Win Outcome:
+- **Sellers** recover costs on excess items.
+- **Buyers** get quick, discounted access to essentials.
+- **Communities** see less food waste and more sustainable operations.
 
-Dynamic Item Details: A sleek Material Bottom Sheet provides item details without navigating away from the map.
+---
 
-Clean, Mobile-First UI: Built with Tailwind CSS and Angular Material for a modern, responsive, and intuitive user experience.
+## ✨ Key Features
 
-Scalable Firebase Backend: Leverages Firebase for authentication, a real-time database (Firestore), and storage.
+- **📍 Real-time Map View** – Discover surplus items available nearby via a dynamic map.
+- **🔐 Anonymous Login** – One-tap anonymous sign-in using Firebase Auth.
+- **📝 Quick Listing Form** – A step-by-step guided form using Angular Material Stepper to post items in under a minute.
+- **📄 Bottom Sheet Item Details** – View item details instantly using Material Bottom Sheet, without leaving the map.
+- **📱 Mobile-First UI** – Designed with Angular Material & Tailwind CSS for sleek responsiveness.
+- **☁️ Firebase-Backed** – Real-time sync, secure uploads, and simple login—all powered by Firebase.
 
-🛠️ Tech Stack
-Frontend Framework: Angular 19+
+---
 
-UI Libraries:
+## 🔧 Tech Stack
 
-Angular Material: For robust, pre-built UI components like Steppers, Bottom Sheets, and Toolbars.
+| Layer | Technology |
+|-------|------------|
+| Frontend | Angular 19+, Tailwind CSS, Angular Material |
+| Backend | Firebase (BaaS) |
+| Authentication | Firebase Auth (Anonymous Sign-in) |
+| Database | Cloud Firestore |
+| Storage | Firebase Cloud Storage |
+| State Management | RxJS |
+| Hosting | Firebase Hosting (for deployment) |
 
-Tailwind CSS: For rapid, utility-first styling and a clean, modern look.
+---
 
-Backend-as-a-Service (BaaS): Google Firebase
+## 🚀 Getting Started
 
-Authentication: Firebase Authentication (Anonymous Sign-in)
+Follow these instructions to run the project locally.
 
-Database: Cloud Firestore (Real-time NoSQL database)
+### ✅ Prerequisites
 
-Storage: Firebase Cloud Storage (for image uploads)
-
-State Management: RxJS
-
-🚀 Getting Started
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
-Prerequisites
-Node.js (v16 or later)
-
-Angular CLI (npm install -g @angular/cli)
-
-A Google account to create a Firebase project.
-
-Installation & Setup
-Clone the repository:
-
-git clone https://github.com/your-username/saajha-rasoi.git
-cd saajha-rasoi
-
-Install NPM packages:
-
-npm install
-
-Set up Firebase:
-
-Go to the Firebase Console and create a new project.
-
-Add a new Web App (</>) to your project.
-
-Firebase will provide you with a firebaseConfig object. Copy this object.
-
-Open src/environments/environment.ts in your project and paste your firebaseConfig object there.
-
-Enable Firebase Services:
-
-In the Firebase Console, navigate to Authentication -> Sign-in method and enable Anonymous sign-in.
-
-Navigate to Firestore Database, create a new database, and start in Test Mode. This will allow open read/write access for development.
-
-Navigate to Storage, click "Get Started," and follow the prompts to enable it.
-
-Run the development server:
-
-ng serve
-
-Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-📂 Project Structure
-The project follows a standard Angular CLI structure, with a focus on modularity.
-
-/src
-|-- /app
-|   |-- /components
-|   |   |-- chat/
-|   |   |-- create-listing/
-|   |   |-- listing-detail-sheet/
-|   |   |-- login/
-|   |   |-- map-home/
-|   |-- /guards
-|   |   |-- auth.guard.ts      # Protects routes from unauthenticated access
-|   |-- app-routing.module.ts  # Defines all application routes
-|   |-- app.component.ts
-|   |-- app.module.ts          # Main application module
-|-- /assets
-|-- /environments
-|   |-- environment.ts         # Firebase config goes here
-|-- index.html
-|-- main.ts
-|-- styles.css                 # Global styles and Tailwind directives
+- [Node.js](https://nodejs.org/) (v16 or later)
+- [Angular CLI](https://angular.io/cli):  
+  ```bash
+  npm install -g @angular/cli
