@@ -1,0 +1,191 @@
+<div class="map-home-container">
+  <!-- Header Bar -->
+  <header class="header-bar">
+    <div class="header-left">
+      <div class="app-logo-sm ">
+        <img src="assets/Icon/logo.png" alt="app-logo">
+      </div>
+      <h1 class="app-name">Saajha Rasoi</h1>
+    </div>
+    <div class="header-right">
+      <button class="header-btn theme-toggle" (click)="onThemeToggle()" [title]="themeService.getThemeLabel()">
+        <img [src]="themeService.getThemeIcon()" [alt]="themeService.getThemeLabel()" class="theme-logo">
+      </button>
+      <button class="header-btn profile-btn" (click)="onProfileClick()">
+        <div class="avatar-sm">
+          <img src="assets/Icon/user.png" alt="user-avatar">
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- Map Area -->
+  <div class="map-container">
+    <div class="map-area">
+      <!-- Location Badge -->
+      <div class="location-badge" (click)="onLocationRefresh()">
+        <span class="material-symbols-outlined">
+          <img src="assets/Icon/location.png" alt="location-icon">
+        </span>
+        {{ getCurrentLocationString() }}
+        @if (locationService.isLoadingLocation()) {
+          <span class="location-loading"></span>
+        }
+      </div>
+
+      <!-- Real Map Container -->
+      <div id="map-container" #mapContainer class="real-map"></div>
+
+      <!-- Map Controls -->
+      @if (mapInitialized() && locationService.currentLocation()) {
+        <button class="center-location-btn" (click)="onCenterOnUser()" title="Center on my location">
+          <span class="material-symbols-outlined">
+            <img src="assets/Icon/center.png" alt="my-location">
+          </span>
+        </button>
+      }
+
+      <!-- Map Loading State -->
+      @if (!mapInitialized() && !locationService.locationError()) {
+        <div class="map-loading">
+          <div class="loading-spinner"></div>
+          <p>Loading map...</p>
+        </div>
+      }
+
+      <!-- Location Error State -->
+      @if (locationService.locationError()) {
+        <div class="map-error">
+          <span class="material-symbols-outlined">location_off</span>
+          <p>{{ locationService.locationError() }}</p>
+          <button class="retry-button" (click)="onLocationRefresh()">
+            <span class="material-symbols-outlined">refresh</span>
+            Try Again
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Bottom Sheet Preview -->
+  <div class="bottom-sheet-preview">
+    <div class="sheet-header">
+      <div class="sheet-handle"></div>
+      <div class="header-content">
+        <h3 class="text-subheader">Nearby Listings</h3>
+        <span class="listing-count">{{ getListingsToShow().length }} available</span>
+      </div>
+    </div>
+    <div class="preview-listings-container">
+      <div class="preview-listings">
+        @for (listing of getListingsToShow(); track listing.id) {
+          <div class="preview-card" (click)="onMarkerClick(listing)">
+            <div class="preview-image">
+              <img [src]="listing.imageUrl" [alt]="listing.name" class="listing-thumb" />
+            </div>
+            <div class="preview-content">
+              <h4 class="listing-title">{{ listing.name }}</h4>
+              <div class="preview-price-qty">
+                <span class="price">₹{{ listing.price }}</span>
+                <span class="quantity">{{ listing.quantity }}</span>
+              </div>
+              <div class="preview-meta">
+                <div class="preview-rating">
+                  @for (star of getStarArray(listing.rating); track $index) {
+                    <img [src]="star.filled || star.partial ? 'assets/Icon/star-fill.png' : 'assets/Icon/star.png'"
+                         alt="star"
+                         class="star"
+                         [class.filled]="star.filled"
+                         [class.partial]="star.partial">
+                  }
+                  <span class="rating-number">{{ listing.rating }}</span>
+                </div>
+                @if (listing.distance !== undefined) {
+                  <span class="distance-badge">{{ getDistanceString(listing) }}</span>
+                }
+              </div>
+              @if (listing.location) {
+                <div class="preview-location">
+                  <span class="material-symbols-outlined location-icon">
+                    <img src="assets/Icon/location.png" alt="">
+                  </span>
+                  <span class="location-text">{{ listing.location }}</span>
+                </div>
+              }
+              <p class="preview-description">{{ listing.description | slice:0:50 }}{{ listing.description.length > 50 ? '...' : '' }}</p>
+            </div>
+            <div class="preview-actions">
+              <button class="quick-chat-btn" (click)="onQuickChat(listing, $event)">
+                <span class="material-symbols-outlined">
+                  <img src="assets/Icon/chat.png" alt="">
+                </span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button class="fab" (click)="onCreateListing()">
+    <img src="assets/Icon/plus.png" alt="">
+  </button>
+
+  <!-- Full Bottom Sheet -->
+  <div class="bottom-sheet-overlay" [class.visible]="showBottomSheet()" (click)="onCloseBottomSheet()"></div>
+  <div class="bottom-sheet" [class.open]="showBottomSheet()">
+    @if (selectedListing(); as listing) {
+      <div class="bottom-sheet-content">
+        <!-- Sheet Handle -->
+        <div class="sheet-handle"></div>
+        
+        <!-- Item Image -->
+        <div class="listing-image-container">
+          <img [src]="listing.imageUrl" [alt]="listing.name" class="listing-image" />
+        </div>
+
+        <!-- Item Details -->
+        <div class="listing-details">
+          <h2 class="text-header">{{ listing.name }}</h2>
+          
+          <div class="price-quantity-row">
+            <span class="listing-price">₹{{ listing.price }}</span>
+            <span class="listing-quantity">{{ listing.quantity }}</span>
+          </div>
+
+          <p class="text-body text-secondary listing-description">{{ listing.description }}</p>
+
+          <!-- Seller Card -->
+          <div class="seller-card">
+            <div class="seller-info">
+              <div class="avatar-md">
+                <span class="material-symbols-outlined">
+                  <img src="assets/Icon/user.png" alt="user-avatar">
+                </span>
+              </div>
+              <div class="seller-details">
+                <span class="seller-name">{{ listing.sellerName }}</span>
+                <div class="seller-rating">
+                  @for (star of getStarArray(listing.rating); track $index) {
+                    <img [src]="star.filled || star.partial ? 'assets/Icon/star-fill.png' : 'assets/Icon/star.png'"
+                         alt="star"
+                         class="star"
+                         [class.filled]="star.filled"
+                         [class.partial]="star.partial">
+                  }
+                  <span class="rating-text">{{ listing.rating }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button class="btn btn-primary btn-lg btn-full claim-button" (click)="onClaimAndChat(listing)">
+            <span class="material-symbols-outlined">Claim & Chat</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
