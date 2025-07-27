@@ -6,10 +6,13 @@
 This project is a submission for **Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food.**  
 📍 *Location:* Kharkhoda, Haryana, India  
 📅 *Date & Time:* Saturday, July 26, 2025, 8:50 PM IST
-**Team Members**
-@Mohitjangra19
-@deepikabhardwaj
-@Ayush
+
+## 👥 Team
+
+- **Mohit Jangra**
+- **Ayush**
+- **Deepika Bhardwaj**
+
 
 
 ---
