@@ -1,59 +1,74 @@
-# SaajhaRasoi
+# 🥘 Saajha Rasoi (The Shared Kitchen)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+**Tagline:** *Your Surplus, Their Staple. Waste Less, Earn More.*
 
-## Development server
+📢 **Project Overview**  
+This project is a submission for **Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food.**  
+📍 *Location:* Kharkhoda, Haryana, India  
+📅 *Date & Time:* Saturday, July 26, 2025, 8:50 PM IST
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🚩 The Problem
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+India's vibrant street food economy faces a critical, often overlooked challenge: the **daily sourcing of raw materials**. Street food vendors work on thin margins, and unsold perishable goods at the end of the day—like chopped vegetables, paneer, or batter—translate into **direct financial loss and food waste**.
 
-## Code scaffolding
+Meanwhile, nearby vendors may be in urgent need of those exact items but are forced to either close early or incur expenses sourcing them from distant markets.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 💡 The Solution — *Saajha Rasoi*
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+**Saajha Rasoi** is a **mobile-first web application** that acts as a **hyper-local peer-to-peer marketplace**, enabling vendors to sell surplus perishable items to nearby vendors in real time.
 
-```bash
-ng generate --help
-```
+### ✅ Benefits for All:
+- **Sellers** recover some cost from potential food waste.
+- **Buyers** get ingredients quickly at a lower price.
+- **Communities** benefit from reduced food waste and stronger vendor cooperation.
 
-## Building
+---
 
-To build the project run:
+## ✨ Key Features
 
-```bash
-ng build
-```
+- **📍 Real-time Map View**  
+  Live map showing surplus items listed by nearby vendors.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **🔐 Anonymous Login**  
+  Easy access using Firebase anonymous sign-in, ideal for street vendors.
 
-## Running unit tests
+- **📝 Multi-Step Listing Creation**  
+  Angular Material Stepper enables a quick and simple listing process.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **📄 Bottom Sheet Item Details**  
+  View item details without leaving the map screen via Material Bottom Sheet.
 
-```bash
-ng test
-```
+- **📱 Mobile-First Design**  
+  Built using Tailwind CSS and Angular Material for modern, responsive UI.
 
-## Running end-to-end tests
+- **☁️ Firebase Backend**  
+  Authentication, real-time database (Firestore), and storage all handled through Firebase.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## 🛠️ Tech Stack
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Layer           | Technology Used                          |
+|----------------|-------------------------------------------|
+| Frontend        | Angular 20+                               |
+| UI Libraries    | Angular Material, Tailwind CSS            |
+| Backend (BaaS)  | Firebase                                  |
+| Authentication | Firebase Authentication (Anonymous Sign-in) |
+| Database        | Cloud Firestore (NoSQL)                  |
+| Storage         | Firebase Cloud Storage                   |
+| State Mgmt.     | RxJS                                      |
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🚀 Getting Started
+
+### ✅ Prerequisites
+
+- Node.js (v16 or later)
+- Angular CLI  
+  ```bash
+  npm install -g @angular/cli
