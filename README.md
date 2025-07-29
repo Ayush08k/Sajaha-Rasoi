@@ -1,11 +1,9 @@
 # 🥘 Saajha Rasoi (The Shared Kitchen)
-** You can see here:** *https://saajha-rasoi01.web.app/home*
 
 **Tagline:** *Your Surplus, Their Staple. Waste Less, Earn More.*
 
 📢 **Project Overview**  
 This project is a submission for **Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food.**
-** You can see here:** *https://saajha-rasoi01.web.app/home*
 📍 *Location:* Kharkhoda, Haryana, India  
 📅 *Date & Time:* Saturday, July 26, 2025, 8:50 PM IST
 
@@ -16,6 +14,10 @@ This project is a submission for **Tutedude’s Web Development Hackathon 1.0 �
 - **Deepika Bhardwaj**
 
 
+
+---
+# 🥘 Watch it here 
+**webApp:**  *https://saajha-rasoi01.web.app/home*
 
 ---
 
