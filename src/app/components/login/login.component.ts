@@ -10,19 +10,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-<<<<<<< HEAD
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneNumber = signal(''); 
   otp = signal('');
   showOtpInput = signal(false); 
   isLoading = signal(false); 
-=======
-export class LoginComponent {
-  phoneNumber = signal('');
-  otp = signal('');
-  showOtpInput = signal(false);
-  isLoading = signal(false);
->>>>>>> parent of 9d09627 (Firestore connected)
   countdown = signal(30);
   canResend = signal(true);
   otpError = signal('');
