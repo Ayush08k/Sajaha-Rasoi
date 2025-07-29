@@ -20,11 +20,6 @@
               class="phone-input"
               placeholder="Enter 10-digit number"
               maxlength="10"
-<<<<<<< HEAD
-  [value]="phoneNumber()"
-            (input)="onPhoneNumberChange($event)"
-            [disabled]="isLoading()"
-=======
               [(ngModel)]="phoneNumber"
               [disabled]="isLoading()"
 >>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
@@ -49,16 +44,6 @@
 
         <p class="verification-text">We'll send a verification code to your phone number</p>
       </div>
-
-      <div id="recaptcha-container"></div>
-
-        <!-- Display general errors here -->
-        @if (generalError()) {
-          <div class="error-message general-error">
-            <span class="material-symbols-outlined">error</span>
-            {{ generalError() }}
-          </div>
-        }
     }
 
     <!-- OTP Input (After phone number is submitted) -->
@@ -84,12 +69,7 @@
             [class.error]="otpError()"
             placeholder="000000"
             maxlength="6"
-<<<<<<< HEAD
-[value]="otp()"
-            (input)="onOtpChange($event)"
-=======
             [(ngModel)]="otp"
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
             [disabled]="isLoading()"
           />
           @if (otpError()) {
@@ -111,12 +91,8 @@
             <div class="loading-spinner"></div>
             <span>Verifying...</span>
           } @else {
-<<<<<<< HEAD
-            <span>Verify OTP</span>
-=======
             <span class="material-symbols-outlined">Verify OTP</span>
             
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
           }
         </button>
 
@@ -127,14 +103,15 @@
             </p>
           } @else {
             <button class="resend-button" (click)="onResendOTP()">
-<<<<<<< HEAD
-              <span>Resend OTP</span>
-=======
               <span class="material-symbols-outlined">Resend OTP</span>
               
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
             </button>
           }
+        </div>
+
+        <div class="demo-hint">
+          <span class="material-symbols-outlined">info</span>
+          <p>Demo: Use <strong>123456</strong> or <strong>000000</strong> as OTP</p>
         </div>
       </div>
     }

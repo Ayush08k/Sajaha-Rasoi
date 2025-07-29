@@ -1,10 +1,7 @@
-import { Component, signal, OnInit, OnDestroy, AfterViewInit, inject } from '@angular/core';
-import { AuthService } from '../../services/auth.service'; 
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs'; 
-import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -13,15 +10,14 @@ import { skip } from 'rxjs/operators';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
-  phoneNumber = signal(''); 
-  otp = signal(''); 
-  showOtpInput = signal(false); 
-  isLoading = signal(false); 
+export class LoginComponent {
+  phoneNumber = signal('');
+  otp = signal('');
+  showOtpInput = signal(false);
+  isLoading = signal(false);
   countdown = signal(30);
-  canResend = signal(true); 
-  otpError = signal(''); 
-  generalError = signal(''); 
+  canResend = signal(true);
+  otpError = signal('');
 
   private userSubscription: Subscription | undefined;
   private countdownTimer: any;
@@ -35,16 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     // Uses skip(1) to prevent the redirect loop on logout
     this.userSubscription = this.authService.user$.pipe(skip(1)).subscribe(user => {
       if (user) {
-<<<<<<< HEAD
-        // **THE FIX**: Added a small delay before navigating.
-        // This prevents a race condition where the component is destroyed
-        // before the login process fully completes.
-        setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 100); // 100ms delay is enough
-=======
         this.router.navigate(['/home']);
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
       }
     });
   }
@@ -71,56 +58,49 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     this.generalError.set(''); 
     this.otpError.set('');
     const phone = this.phoneNumber();
-    const fullPhoneNumber = `+91${phone}`; 
-
     if (phone.length === 10) {
       this.isLoading.set(true);
-      try {
-        await this.authService.sendVerificationCode(fullPhoneNumber);
+
+      // Simulate API call delay
+      setTimeout(() => {
+        this.isLoading.set(false);
         this.showOtpInput.set(true);
         this.startCountdown();
-        this.otp.set(''); 
-      } catch (error: any) {
-        console.error('Failed to send OTP:', error);
-        this.generalError.set(error.message || 'Failed to send OTP. Please try again.');
-      } finally {
-        this.isLoading.set(false);
-      }
-    } else {
-      this.generalError.set('Please enter a valid 10-digit phone number.');
+      }, 1500);
     }
   }
 
-  async onVerifyOTP() {
-    this.otpError.set('');
-    this.generalError.set('');
+  onVerifyOTP() {
     const otpValue = this.otp();
-
     if (otpValue.length === 6) {
       this.isLoading.set(true);
-      try {
-        await this.authService.verifyOtp(otpValue);
-        // The user$.subscribe in ngOnInit will handle navigation
-      } catch (error: any) {
-        console.error('Failed to verify OTP:', error);
-        if (error.code === 'auth/invalid-verification-code') {
-          this.otpError.set('Invalid OTP. Please try again.');
-        } else if (error.code === 'auth/code-expired') {
-            this.otpError.set('OTP expired. Please resend.');
-        } else {
-          this.otpError.set(error.message || 'OTP verification failed.');
-        }
-      } finally {
+
+      // Simulate OTP verification
+      setTimeout(() => {
         this.isLoading.set(false);
-      }
-    } else {
-      this.otpError.set('Please enter a 6-digit OTP.');
+        if (otpValue === '123456' || otpValue === '000000') {
+          // Successful verification
+          this.router.navigate(['/home']);
+        } else {
+          // Show error
+          this.otpError.set('Invalid OTP. Try 123456 or 000000 for demo.');
+          setTimeout(() => this.otpError.set(''), 3000);
+        }
+      }, 1000);
     }
   }
 
-  async onResendOTP() {
-    if (this.canResend() && !this.isLoading()) {
-      this.onGetOTP();
+  onResendOTP() {
+    if (this.canResend()) {
+      this.otp.set('');
+      this.otpError.set('');
+      this.startCountdown();
+
+      // Simulate resend API call
+      this.isLoading.set(true);
+      setTimeout(() => {
+        this.isLoading.set(false);
+      }, 1000);
     }
   }
 
@@ -128,49 +108,38 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     this.canResend.set(false);
     this.countdown.set(30);
 
-    if (this.countdownTimer) {
-      clearInterval(this.countdownTimer);
-    }
-
-    this.countdownTimer = setInterval(() => {
+    const timer = setInterval(() => {
       const current = this.countdown();
-      if (current > 1) {
+      if (current > 0) {
         this.countdown.set(current - 1);
       } else {
         this.canResend.set(true);
-        clearInterval(this.countdownTimer);
-        this.countdownTimer = null;
+        clearInterval(timer);
       }
     }, 1000);
   }
 
   onPhoneNumberChange(event: Event) {
     const input = event.target as HTMLInputElement;
+    // Only allow digits and limit to 10 characters
     const value = input.value.replace(/\D/g, '').slice(0, 10);
     this.phoneNumber.set(value);
     input.value = value;
-    this.generalError.set('');
   }
 
   onOtpChange(event: Event) {
     const input = event.target as HTMLInputElement;
+    // Only allow digits and limit to 6 characters
     const value = input.value.replace(/\D/g, '').slice(0, 6);
     this.otp.set(value);
     input.value = value;
-    this.otpError.set('');
+    this.otpError.set(''); // Clear error when user types
   }
 
   onBackToPhone() {
     this.showOtpInput.set(false);
     this.otp.set('');
     this.otpError.set('');
-    this.generalError.set('');
     this.canResend.set(true);
-    if (this.countdownTimer) {
-      clearInterval(this.countdownTimer);
-      this.countdownTimer = null;
-    }
-    // Set up a new reCAPTCHA instance when the user goes back
-    this.authService.setupRecaptcha();
   }
 }

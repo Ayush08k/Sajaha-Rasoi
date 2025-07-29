@@ -2,11 +2,7 @@ import { Injectable, inject, NgZone } from '@angular/core';
 import { Auth, signInWithPhoneNumber, signOut, onAuthStateChanged, User, ConfirmationResult } from '@angular/fire/auth';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { Observable } from 'rxjs';
-<<<<<<< HEAD
 import { Firestore, doc, setDoc, serverTimestamp, getDoc } from '@angular/fire/firestore';
-=======
-import { Firestore, doc, setDoc, serverTimestamp } from '@angular/fire/firestore';
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
 
 @Injectable({
   providedIn: 'root'
@@ -113,10 +109,7 @@ export class AuthService {
     try {
       await signOut(this.auth);
       this.confirmationResult = null; // Clear any pending confirmation result on sign out
-<<<<<<< HEAD
       this.destroyRecaptcha(); // Clean up any recaptcha instances
-=======
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
     } catch (error: any) {
       console.error('Sign-out error:', error.message);
       throw error;
@@ -136,20 +129,16 @@ export class AuthService {
   private async createUserProfile(user: User): Promise<void> {
     if (!user.uid) return; // Ensure UID exists for the document path
     const userDocRef = doc(this.firestore, `users/${user.uid}`);
-<<<<<<< HEAD
 
     // Check if user document already exists
     const userSnap = await getDoc(userDocRef);
     const isNewUser = !userSnap.exists();
 
-=======
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
     await setDoc(userDocRef, {
       uid: user.uid,
       phoneNumber: user.phoneNumber || null,
       username: user.displayName || user.phoneNumber || `User-${user.uid.slice(0, 4)}`,
       profilePictureUrl: user.photoURL || null,
-<<<<<<< HEAD
       ...(isNewUser && {
         createdAt: serverTimestamp(),
         onboardingCompleted: false
@@ -157,12 +146,6 @@ export class AuthService {
       isOnline: true,
       lastSeen: serverTimestamp()
     }, { merge: true });
-=======
-      createdAt: serverTimestamp(), // Use Firestore server timestamp for consistent time
-      isOnline: true, // Set user as online upon authentication
-      lastSeen: serverTimestamp() // Record last seen timestamp
-    }, { merge: true }); // Use merge: true to avoid overwriting existing fields
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
   }
 
   /**
@@ -175,7 +158,6 @@ export class AuthService {
       lastSeen: serverTimestamp()
     }, { merge: true });
   }
-<<<<<<< HEAD
 
   /**
    * Checks if the current user needs onboarding (new user without completed onboarding)
@@ -197,6 +179,4 @@ export class AuthService {
       return false;
     }
   }
-=======
->>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
 }
