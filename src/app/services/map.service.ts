@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Coordinates } from './location.service';
+// **THE FIX**: Changed to a static, namespaced import.
+import * as L from 'leaflet';
 
 export interface MapMarker {
   id: string;
@@ -14,44 +16,42 @@ export interface MapMarker {
   providedIn: 'root'
 })
 export class MapService {
-  private map: any = null;
-  private markers: any[] = [];
-  private userLocationMarker: any = null;
-  private L: any = null;
+  // Use Leaflet's types for better code quality
+  private map: L.Map | null = null;
+  private markers: L.Marker[] = [];
+  private userLocationMarker: L.Marker | null = null;
+  
+  // The private 'L' property is no longer needed
 
-  async initializeMap(containerId: string, center: Coordinates, zoom: number = 13): Promise<any> {
-    // Dynamic import for SSR compatibility
-    if (!this.L) {
-      this.L = await import('leaflet');
-    }
-
+  // **THE FIX**: Removed 'async' as the import is no longer dynamic
+  initializeMap(containerId: string, center: Coordinates, zoom: number = 13): L.Map | null {
     // Clean up existing map
     if (this.map) {
       this.map.remove();
     }
 
-    // Fix default marker icon paths
-    delete (this.L.Icon.Default.prototype as any)._getIconUrl;
-    this.L.Icon.Default.mergeOptions({
-      iconRetinaUrl: '/assets/leaflet/marker-icon-2x.png',
-      iconUrl: '/assets/leaflet/marker-icon.png',
-      shadowUrl: '/assets/leaflet/marker-shadow.png',
+    // Fix default marker icon paths using the imported 'L'
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png', // Note: Removed leading slash for better compatibility
+      iconUrl: 'assets/leaflet/marker-icon.png',
+      shadowUrl: 'assets/leaflet/marker-shadow.png',
     });
 
-    // Initialize map
-    this.map = this.L.map(containerId, {
-      zoomControl: false, // We'll add custom controls
+    // Initialize map using 'L'
+    this.map = L.map(containerId, {
+      zoomControl: false,
       attributionControl: true
     }).setView([center.lat, center.lng], zoom);
 
-    // Add tile layer (OpenStreetMap)
-    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Add tile layer (OpenStreetMap) using 'L'
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
     }).addTo(this.map);
 
-    // Add custom zoom control
-    this.L.control.zoom({
+    // Add custom zoom control using 'L'
+    L.control.zoom({
       position: 'bottomright'
     }).addTo(this.map);
 
@@ -59,15 +59,13 @@ export class MapService {
   }
 
   addUserLocationMarker(coordinates: Coordinates): void {
-    if (!this.map || !this.L) return;
+    if (!this.map) return;
 
-    // Remove existing user location marker
     if (this.userLocationMarker) {
       this.map.removeLayer(this.userLocationMarker);
     }
 
-    // User location icon
-    const userLocationIcon = this.L.divIcon({
+    const userLocationIcon = L.divIcon({
       className: 'user-location-marker',
       html: `
         <div class="user-marker">
@@ -78,15 +76,13 @@ export class MapService {
       iconAnchor: [10, 10]
     });
 
-    // Add new user location marker
-    this.userLocationMarker = this.L.marker([coordinates.lat, coordinates.lng], {
+    this.userLocationMarker = L.marker([coordinates.lat, coordinates.lng], {
       icon: userLocationIcon,
-      zIndexOffset: 1000 // Ensure it's on top
+      zIndexOffset: 1000
     }).addTo(this.map);
 
-    // Add accuracy circle
-    this.L.circle([coordinates.lat, coordinates.lng], {
-      radius: 100, // 100 meters accuracy
+    L.circle([coordinates.lat, coordinates.lng], {
+      radius: 100,
       fillColor: '#007AFF',
       fillOpacity: 0.1,
       color: '#007AFF',
@@ -96,13 +92,11 @@ export class MapService {
   }
 
   addMarkers(markers: MapMarker[]): void {
-    if (!this.map || !this.L) return;
+    if (!this.map) return;
 
-    // Clear existing markers
     this.clearMarkers();
 
-    // Custom icon for listings
-    const listingIcon = this.L.divIcon({
+    const listingIcon = L.divIcon({
       className: 'custom-marker',
       html: `
         <div class="marker-pin">
@@ -116,13 +110,11 @@ export class MapService {
       popupAnchor: [0, -40]
     });
 
-    // Add new markers
     markers.forEach(markerData => {
-      const marker = this.L.marker([markerData.coordinates.lat, markerData.coordinates.lng], {
+      const marker = L.marker([markerData.coordinates.lat, markerData.coordinates.lng], {
         icon: listingIcon
       });
 
-      // Create popup content
       const popupContent = `
         <div class="map-popup">
           <h4 class="popup-title">${markerData.title}</h4>
@@ -134,14 +126,12 @@ export class MapService {
 
       marker.bindPopup(popupContent);
 
-      // Handle marker click
       marker.on('click', () => {
         if (markerData.onClick) {
           markerData.onClick();
         }
       });
 
-      // Handle popup button click
       marker.on('popupopen', () => {
         const button = document.querySelector(`[data-marker-id="${markerData.id}"]`);
         if (button && markerData.onClick) {
@@ -149,7 +139,7 @@ export class MapService {
         }
       });
 
-      marker.addTo(this.map);
+      marker.addTo(this.map!);
       this.markers.push(marker);
     });
   }
@@ -174,11 +164,11 @@ export class MapService {
   }
 
   fitBounds(markers: MapMarker[], padding: number = 50): void {
-    if (!this.map || !this.L || markers.length === 0) return;
+    if (!this.map || markers.length === 0) return;
 
-    const group = new this.L.FeatureGroup(
+    const group = new L.FeatureGroup(
       markers.map(marker =>
-        this.L.marker([marker.coordinates.lat, marker.coordinates.lng])
+        L.marker([marker.coordinates.lat, marker.coordinates.lng])
       )
     );
 

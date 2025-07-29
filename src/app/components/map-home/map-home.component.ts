@@ -4,20 +4,16 @@ import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
 import { LocationService, LocationInfo, Coordinates } from '../../services/location.service';
 import { MapService, MapMarker } from '../../services/map.service';
+import { AuthService } from '../../services/auth.service';
+import { ListingsService, Listing } from '../../services/listings.service';
+import { Subscription } from 'rxjs';
 
-interface Listing {
-  id: string;
-  name: string;
-  price: number;
-  quantity: string;
-  description: string;
-  sellerName: string;
-  rating: number;
-  imageUrl: string;
+interface MapListing extends Listing {
   lat: number;
   lng: number;
   distance?: number;
-  location?: string;
+  sellerName?: string;
+  rating?: number;
 }
 
 // Removed MarkerPosition interface as we'll use real coordinates
@@ -31,21 +27,35 @@ interface Listing {
 })
 export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
-  listings = signal<Listing[]>([]);
-  selectedListing = signal<Listing | null>(null);
+  listings = signal<MapListing[]>([]);
+  selectedListing = signal<MapListing | null>(null);
   showBottomSheet = signal(false);
   mapInitialized = signal(false);
-  nearbyListings = signal<Listing[]>([]);
+  nearbyListings = signal<MapListing[]>([]);
+  isLoadingListings = signal(true);
+
+  private userSubscription: Subscription | undefined;
 
   constructor(
     private router: Router,
     public themeService: ThemeService,
     public locationService: LocationService,
-    private mapService: MapService
+    private mapService: MapService,
+    private authService: AuthService,
+    private listingsService: ListingsService
   ) {}
 
   ngOnInit() {
-    this.initializeMockData();
+    // Check if user is authenticated
+    this.userSubscription = this.authService.user$.subscribe(user => {
+      if (!user) {
+        // Redirect to login if not authenticated
+        this.router.navigate(['/login']);
+      }
+    });
+
+    // Initialize app data regardless of auth state (it will redirect if needed)
+    this.loadListings();
     this.setupLocationWatcher();
   }
 
@@ -59,125 +69,47 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
     this.mapService.destroy();
   }
 
-  private initializeMockData() {
-    // Get base coordinates for generating nearby listings
-    const currentLocation = this.locationService.currentLocation();
-    const baseLat = currentLocation ? currentLocation.coordinates.lat : 28.7041;
-    const baseLng = currentLocation ? currentLocation.coordinates.lng : 77.1025;
+  async loadListings() {
+    this.isLoadingListings.set(true);
 
-    // Generate listings around the current location
-    const baseListings: Listing[] = [
-      {
-        id: '1',
-        name: 'Fresh Paneer',
-        price: 250,
-        quantity: '2 kg',
-        description: 'High quality fresh paneer, perfect for various dishes. Made this morning from pure milk.',
-        sellerName: 'Rajesh Kumar',
-        rating: 4.8,
-        imageUrl: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&h=300&fit=crop',
-        lat: baseLat + 0.003,
-        lng: baseLng + 0.002,
-        location: 'Sector 15, Delhi'
-      },
-      {
-        id: '2',
-        name: 'Red Onions',
-        price: 30,
-        quantity: '5 kg',
-        description: 'Fresh red onions, excellent for cooking. Surplus from wholesale purchase, good quality.',
-        sellerName: 'Priya Sharma',
-        rating: 4.5,
-        imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop',
-        lat: baseLat - 0.002,
-        lng: baseLng + 0.004,
-        location: 'Rohini, Delhi'
-      },
-      {
-        id: '3',
-        name: 'Fresh Tomatoes',
-        price: 40,
-        quantity: '3 kg',
-        description: 'Ripe tomatoes, perfect for curries and salads. Very fresh quality, just arrived.',
-        sellerName: 'Mohammad Ali',
-        rating: 4.7,
-        imageUrl: 'https://images.unsplash.com/photo-1546470427-e26264ce03a8?w=400&h=300&fit=crop',
-        lat: baseLat + 0.005,
-        lng: baseLng - 0.003,
-        location: 'Pitampura, Delhi'
-      },
-      {
-        id: '4',
-        name: 'Green Chilies',
-        price: 15,
-        quantity: '1 kg',
-        description: 'Fresh green chilies, medium spice level. Perfect for various Indian dishes.',
-        sellerName: 'Sunita Devi',
-        rating: 4.6,
-        imageUrl: 'https://images.unsplash.com/photo-1583392151171-0c6e2a0bb2d3?w=400&h=300&fit=crop',
-        lat: baseLat - 0.004,
-        lng: baseLng - 0.002,
-        location: 'Model Town, Delhi'
-      },
-      {
-        id: '5',
-        name: 'Fresh Spinach',
-        price: 20,
-        quantity: '1 bundle',
-        description: 'Fresh organic spinach, perfect for healthy meals. Harvested this morning.',
-        sellerName: 'Meera Devi',
-        rating: 4.9,
-        imageUrl: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop',
-        lat: baseLat + 0.001,
-        lng: baseLng + 0.006,
-        location: 'Ashok Vihar, Delhi'
-      },
-      {
-        id: '6',
-        name: 'Basmati Rice',
-        price: 80,
-        quantity: '2 kg',
-        description: 'Premium quality basmati rice, aged for better aroma and taste.',
-        sellerName: 'Ramesh Singh',
-        rating: 4.7,
-        imageUrl: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=300&fit=crop',
-        lat: baseLat - 0.001,
-        lng: baseLng - 0.005,
-        location: 'Shalimar Bagh, Delhi'
-      },
-      {
-        id: '7',
-        name: 'Fresh Milk',
-        price: 50,
-        quantity: '1 liter',
-        description: 'Farm fresh cow milk, delivered twice daily. Rich in nutrients and taste.',
-        sellerName: 'Farmer Suresh',
-        rating: 4.8,
-        imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=300&fit=crop',
-        lat: baseLat + 0.007,
-        lng: baseLng + 0.001,
-        location: 'Keshav Puram, Delhi'
-      },
-      {
-        id: '8',
-        name: 'Fresh Carrots',
-        price: 35,
-        quantity: '1 kg',
-        description: 'Organic carrots, perfect for salads and cooking. Sweet and crunchy.',
-        sellerName: 'Ravi Kumar',
-        rating: 4.6,
-        imageUrl: 'https://images.unsplash.com/photo-1445282768818-728615cc910a?w=400&h=300&fit=crop',
-        lat: baseLat - 0.006,
-        lng: baseLng + 0.003,
-        location: 'Wazirabad, Delhi'
+    try {
+      const listings = await this.listingsService.getActiveListings();
+
+      // Transform Firestore listings to map listings
+      const mapListings: MapListing[] = listings
+        .filter(listing => listing.coordinates) // Only listings with coordinates
+        .map(listing => ({
+          ...listing,
+          lat: listing.coordinates!.lat,
+          lng: listing.coordinates!.lng,
+          sellerName: listing.senderName || 'Anonymous',
+          rating: 4.5 // Default rating for now
+        }));
+
+      this.listings.set(mapListings);
+      this.updateNearbyListings();
+
+      // Update map markers if map is initialized
+      if (this.mapInitialized()) {
+        this.updateMapMarkers();
       }
-    ];
+    } catch (error) {
+      console.error('Error loading listings:', error);
+      // Fallback to empty array
+      this.listings.set([]);
+    } finally {
+      this.isLoadingListings.set(false);
+    }
+  }
 
-    this.listings.set(baseListings);
-    this.updateNearbyListings();
+  async refreshListings() {
+    await this.loadListings();
   }
 
   private setupLocationWatcher() {
@@ -194,7 +126,7 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
               previousLocation.coordinates,
               currentLocation.coordinates
             ) > 0.5) { // Only regenerate if moved more than 500m
-          this.initializeMockData();
+          this.loadListings();
         }
 
         this.updateNearbyListings();
@@ -212,7 +144,7 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const currentLocation = this.locationService.currentLocation();
     const center: Coordinates = currentLocation ?
       currentLocation.coordinates :
-      { lat: 28.7041, lng: 77.1025 }; // Default to Delhi
+      { lat: 29.0588, lng: 76.0856 }; // Default to Haryana region
 
     console.log('Map center:', center);
 
@@ -261,14 +193,16 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateMapMarkers() {
-    const mapMarkers: MapMarker[] = this.nearbyListings().map(listing => ({
-      id: listing.id,
-      coordinates: { lat: listing.lat, lng: listing.lng },
-      title: listing.name,
-      description: listing.description,
-      price: listing.price,
-      onClick: () => this.onMarkerClick(listing)
-    }));
+    const mapMarkers: MapMarker[] = this.nearbyListings()
+      .filter(listing => typeof listing.id === 'string')
+      .map(listing => ({
+        id: listing.id as string,
+        coordinates: { lat: listing.lat, lng: listing.lng },
+        title: listing.name,
+        description: listing.description,
+        price: listing.price,
+        onClick: () => this.onMarkerClick(listing)
+      }));
 
     this.mapService.addMarkers(mapMarkers);
   }
@@ -278,11 +212,24 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onProfileClick() {
-    this.router.navigate(['/profile']);
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.router.navigate(['/profile']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   onMarkerClick(listing: Listing) {
-    this.selectedListing.set(listing);
+    // Ensure the listing has lat/lng and other MapListing properties
+    const mapListing: MapListing = {
+      ...listing,
+      lat: listing.coordinates?.lat ?? 0,
+      lng: listing.coordinates?.lng ?? 0,
+      sellerName: (listing as any).senderName || 'Anonymous',
+      rating: (listing as any).rating ?? 4.5
+    };
+    this.selectedListing.set(mapListing);
     this.showBottomSheet.set(true);
   }
 
@@ -291,12 +238,24 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedListing.set(null);
   }
 
-  onClaimAndChat(listing: Listing) {
+  onClaimAndChat(listing: MapListing) {
+    // Check if user is trying to chat with themselves
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.uid === listing.senderId) {
+      alert('You cannot chat with yourself!');
+      return;
+    }
     this.router.navigate(['/chat', listing.id]);
   }
 
-  onQuickChat(listing: Listing, event: Event) {
+  onQuickChat(listing: MapListing, event: Event) {
     event.stopPropagation();
+    // Check if user is trying to chat with themselves
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.uid === listing.senderId) {
+      alert('You cannot chat with yourself!');
+      return;
+    }
     this.router.navigate(['/chat', listing.id]);
   }
 
@@ -308,7 +267,7 @@ export class MapHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.nearbyListings();
   }
 
-  getDistanceString(listing: Listing): string {
+  getDistanceString(listing: MapListing): string {
     return listing.distance ? this.locationService.formatDistance(listing.distance) : '';
   }
 

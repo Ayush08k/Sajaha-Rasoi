@@ -1,0 +1,55 @@
+<div class="onboarding-container">
+  <div class="onboarding-content">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-icon">
+        <img src="assets/Icon/logo.png" alt="Saajha Rasoi Logo" class="app-logo"/>
+      </div>
+      <h1 class="welcome-title">Welcome to Saajha Rasoi!</h1>
+      <p class="welcome-subtitle">Let's get to know you better</p>
+    </div>
+
+    <!-- Name Input Form -->
+    <div class="name-form">
+      <div class="form-group">
+        <label for="name" class="form-label">What's your name?</label>
+        <input
+          id="name"
+          type="text"
+          class="name-input"
+          [class.error]="error()"
+          placeholder="Enter your full name"
+          [value]="name()"
+          (input)="onNameChange($event)"
+          [disabled]="isLoading()"
+          maxlength="50"
+        />
+        @if (error()) {
+          <div class="error-message">
+            <span class="material-symbols-outlined">error</span>
+            {{ error() }}
+          </div>
+        }
+      </div>
+
+      <button 
+        class="continue-button"
+        [class.loading]="isLoading()"
+        [class.disabled]="name().trim().length < 2"
+        [disabled]="name().trim().length < 2 || isLoading()"
+        (click)="onSubmit()"
+      >
+        @if (isLoading()) {
+          <div class="loading-spinner"></div>
+          <span>Saving...</span>
+        } @else {
+          <span>Continue</span>
+        }
+      </button>
+
+      <p class="privacy-text">
+        Your name will be visible to other users when you create listings or chat.
+      </p>
+    </div>
+  </div>
+</div>

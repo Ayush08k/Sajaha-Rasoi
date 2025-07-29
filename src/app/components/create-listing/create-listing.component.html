@@ -4,7 +4,7 @@
     <button class="back-button" (click)="onBack()">
       <img src="assets/Icon/back-arrow.png" alt="back-arrow">
     </button>
-    <h1 class="page-title">Post Your Product</h1>
+    <h1 class="page-title">{{ isEditMode() ? 'Edit Product' : 'Post Your Product' }}</h1>
 
   </div>
 
@@ -89,6 +89,36 @@
         </div>
       </div>
 
+      <!-- Location -->
+      <div class="form-section">
+        <label for="location" class="section-label">Location *</label>
+        <div class="location-input-wrapper">
+          <input
+            id="location"
+            type="text"
+            class="form-input location-input"
+            placeholder="e.g., Kharkhoda, Haryana"
+            [value]="location()"
+            (input)="onLocationChange($event)"
+            required
+          />
+          <button
+            type="button"
+            class="current-location-btn"
+            (click)="useCurrentLocation()"
+            [disabled]="isLoadingLocation()"
+            title="Use current location"
+          >
+            @if (isLoadingLocation()) {
+              <div class="loading-spinner-small"></div>
+            } @else {
+              <span class="material-symbols-outlined">my_location</span>
+            }
+          </button>
+        </div>
+        <p class="input-help">This helps buyers find products near them</p>
+      </div>
+
       <!-- Description -->
       <div class="form-section">
         <label for="description" class="section-label">Description *</label>
@@ -107,7 +137,7 @@
       <div class="tips-section">
         <div class="tips-header">
           <div class="tips-icon">
-            <span class="material-symbols-outlined">lightbulb</span>
+            <span class="material-symbols-outlined"></span>
           </div>
           <h3 class="tips-title">Tips for better listings</h3>
         </div>
@@ -164,14 +194,28 @@
         </div>
       </div>
 
+      <!-- Error Message -->
+      @if (submitError()) {
+        <div class="error-message">
+          <span class="material-symbols-outlined">error</span>
+          {{ submitError() }}
+        </div>
+      }
+
       <!-- Submit Button -->
       <button
         type="submit"
         class="submit-button"
-        [class.disabled]="!isFormValid()"
-        [disabled]="!isFormValid()"
+        [class.disabled]="!isFormValid() || isSubmitting()"
+        [class.loading]="isSubmitting()"
+        [disabled]="!isFormValid() || isSubmitting()"
       >
-        <span class="material-symbols-outlined"> Post Item</span>
+        @if (isSubmitting()) {
+          <div class="loading-spinner"></div>
+          <span>{{ isEditMode() ? 'Updating...' : 'Creating Listing...' }}</span>
+        } @else {
+          <span>{{ isEditMode() ? 'Update Item' : 'Post Item' }}</span>
+        }
       </button>
     </form>
   </div>

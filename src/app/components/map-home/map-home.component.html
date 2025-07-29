@@ -89,21 +89,7 @@
                 <span class="price">₹{{ listing.price }}</span>
                 <span class="quantity">{{ listing.quantity }}</span>
               </div>
-              <div class="preview-meta">
-                <div class="preview-rating">
-                  @for (star of getStarArray(listing.rating); track $index) {
-                    <img [src]="star.filled || star.partial ? 'assets/Icon/star-fill.png' : 'assets/Icon/star.png'"
-                         alt="star"
-                         class="star"
-                         [class.filled]="star.filled"
-                         [class.partial]="star.partial">
-                  }
-                  <span class="rating-number">{{ listing.rating }}</span>
-                </div>
-                @if (listing.distance !== undefined) {
-                  <span class="distance-badge">{{ getDistanceString(listing) }}</span>
-                }
-              </div>
+              
               @if (listing.location) {
                 <div class="preview-location">
                   <span class="material-symbols-outlined location-icon">
@@ -115,7 +101,7 @@
               <p class="preview-description">{{ listing.description | slice:0:50 }}{{ listing.description.length > 50 ? '...' : '' }}</p>
             </div>
             <div class="preview-actions">
-              <button class="quick-chat-btn" (click)="onQuickChat(listing, $event)">
+              <button class="quick-chat-btn" >
                 <span class="material-symbols-outlined">
                   <img src="assets/Icon/chat.png" alt="">
                 </span>
@@ -166,16 +152,6 @@
               </div>
               <div class="seller-details">
                 <span class="seller-name">{{ listing.sellerName }}</span>
-                <div class="seller-rating">
-                  @for (star of getStarArray(listing.rating); track $index) {
-                    <img [src]="star.filled || star.partial ? 'assets/Icon/star-fill.png' : 'assets/Icon/star.png'"
-                         alt="star"
-                         class="star"
-                         [class.filled]="star.filled"
-                         [class.partial]="star.partial">
-                  }
-                  <span class="rating-text">{{ listing.rating }}</span>
-                </div>
               </div>
             </div>
           </div>
