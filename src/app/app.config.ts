@@ -3,6 +3,9 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessC
 import { provideRouter } from '@angular/router';
 =======
 import { provideRouter, withHashLocation, withInMemoryScrolling } from '@angular/router';
+<<<<<<< HEAD
+>>>>>>> parent of 9d09627 (Firestore connected)
+=======
 >>>>>>> parent of 9d09627 (Firestore connected)
 
 import { routes } from './app.routes';
@@ -20,6 +23,9 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ scrollPositionRestoration: 'top' })
     ),
     provideClientHydration(withEventReplay())
+<<<<<<< HEAD
+>>>>>>> parent of 9d09627 (Firestore connected)
+=======
 >>>>>>> parent of 9d09627 (Firestore connected)
   ]
 };

@@ -35,7 +35,10 @@
 >>>>>>> parent of 5f8b687 (component is added)
     "express": "^5.1.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 9d09627 (Firestore connected)
     "leaflet": "^1.9.4",
 >>>>>>> parent of 9d09627 (Firestore connected)
     "rxjs": "~7.8.0",

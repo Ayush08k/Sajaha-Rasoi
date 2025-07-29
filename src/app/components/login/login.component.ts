@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneNumber = signal(''); 
   otp = signal('');
@@ -20,13 +21,18 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 =======
 =======
 >>>>>>> parent of 9d09627 (Firestore connected)
+=======
+>>>>>>> parent of 9d09627 (Firestore connected)
 export class LoginComponent {
   phoneNumber = signal('');
   otp = signal('');
   showOtpInput = signal(false);
   isLoading = signal(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of ff3a45c (Merge pull request #1 from Ayush08k/authenticationAdd)
+=======
+>>>>>>> parent of 9d09627 (Firestore connected)
 =======
 >>>>>>> parent of 9d09627 (Firestore connected)
   countdown = signal(30);
