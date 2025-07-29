@@ -20,9 +20,9 @@
               class="phone-input"
               placeholder="Enter 10-digit number"
               maxlength="10"
-  [value]="phoneNumber()"
-            (input)="onPhoneNumberChange($event)"
-            [disabled]="isLoading()"
+              [value]="phoneNumber()"
+              (input)="onPhoneNumberChange($event)"
+              [disabled]="isLoading()"
             />
           </div>
         </div>
@@ -44,16 +44,6 @@
 
         <p class="verification-text">We'll send a verification code to your phone number</p>
       </div>
-
-      <div id="recaptcha-container"></div>
-
-        <!-- Display general errors here -->
-        @if (generalError()) {
-          <div class="error-message general-error">
-            <span class="material-symbols-outlined">error</span>
-            {{ generalError() }}
-          </div>
-        }
     }
 
     <!-- OTP Input (After phone number is submitted) -->
@@ -79,7 +69,7 @@
             [class.error]="otpError()"
             placeholder="000000"
             maxlength="6"
-[value]="otp()"
+            [value]="otp()"
             (input)="onOtpChange($event)"
             [disabled]="isLoading()"
           />
@@ -102,6 +92,7 @@
             <div class="loading-spinner"></div>
             <span>Verifying...</span>
           } @else {
+            <span class="material-symbols-outlined">verified</span>
             <span>Verify OTP</span>
           }
         </button>
@@ -113,9 +104,15 @@
             </p>
           } @else {
             <button class="resend-button" (click)="onResendOTP()">
-              <span>Resend OTP</span>
+              <span class="material-symbols-outlined">refresh</span>
+              Resend OTP
             </button>
           }
+        </div>
+
+        <div class="demo-hint">
+          <span class="material-symbols-outlined">info</span>
+          <p>Demo: Use <strong>123456</strong> or <strong>000000</strong> as OTP</p>
         </div>
       </div>
     }
