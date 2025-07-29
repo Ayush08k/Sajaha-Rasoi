@@ -10,11 +10,19 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+<<<<<<< HEAD
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneNumber = signal(''); 
   otp = signal('');
   showOtpInput = signal(false); 
   isLoading = signal(false); 
+=======
+export class LoginComponent {
+  phoneNumber = signal('');
+  otp = signal('');
+  showOtpInput = signal(false);
+  isLoading = signal(false);
+>>>>>>> parent of ff3a45c (Merge pull request #1 from Ayush08k/authenticationAdd)
   countdown = signal(30);
   canResend = signal(true);
   otpError = signal('');
