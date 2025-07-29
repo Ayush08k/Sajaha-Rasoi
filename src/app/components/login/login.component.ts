@@ -15,7 +15,7 @@ import { skip } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneNumber = signal(''); 
-  otp = signal(''); 
+  otp = signal('');
   showOtpInput = signal(false); 
   isLoading = signal(false); 
   countdown = signal(30);
