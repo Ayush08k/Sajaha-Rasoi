@@ -19,44 +19,9 @@ export class LoginComponent {
   canResend = signal(true);
   otpError = signal('');
 
-  private userSubscription: Subscription | undefined;
-  private countdownTimer: any;
+  constructor(private router: Router) {}
 
-  private authService: AuthService = inject(AuthService);
-  private router: Router = inject(Router);
-  
-  constructor() {}
-
-  ngOnInit(): void {
-    // Uses skip(1) to prevent the redirect loop on logout
-    this.userSubscription = this.authService.user$.pipe(skip(1)).subscribe(user => {
-      if (user) {
-        this.router.navigate(['/home']);
-      }
-    });
-  }
-
-  ngAfterViewInit(): void {
-    // Sets up a fresh reCAPTCHA instance every time the component view is ready
-    this.authService.setupRecaptcha();
-  }
-
-  ngOnDestroy(): void {
-    // Unsubscribe from the user observable to prevent memory leaks
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
-    // Clear the countdown timer
-    if (this.countdownTimer) {
-      clearInterval(this.countdownTimer);
-    }
-    // **CRUCIAL**: Clean up the reCAPTCHA instance when leaving the page
-    this.authService.destroyRecaptcha();
-  }
-
-  async onGetOTP() {
-    this.generalError.set(''); 
-    this.otpError.set('');
+  onGetOTP() {
     const phone = this.phoneNumber();
     if (phone.length === 10) {
       this.isLoading.set(true);
