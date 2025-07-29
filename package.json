@@ -35,7 +35,11 @@
     "@googlemaps/js-api-loader": "^1.16.10",
     "@tailwindcss/postcss": "^4.1.11",
     "express": "^5.1.0",
+<<<<<<< HEAD
     "firebase": "^11.10.0",
+=======
+    "firebase": "^12.0.0",
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
     "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

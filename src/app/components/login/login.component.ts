@@ -35,12 +35,16 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     // Uses skip(1) to prevent the redirect loop on logout
     this.userSubscription = this.authService.user$.pipe(skip(1)).subscribe(user => {
       if (user) {
+<<<<<<< HEAD
         // **THE FIX**: Added a small delay before navigating.
         // This prevents a race condition where the component is destroyed
         // before the login process fully completes.
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 100); // 100ms delay is enough
+=======
+        this.router.navigate(['/home']);
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
       }
     });
   }

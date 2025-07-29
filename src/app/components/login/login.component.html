@@ -20,9 +20,14 @@
               class="phone-input"
               placeholder="Enter 10-digit number"
               maxlength="10"
+<<<<<<< HEAD
   [value]="phoneNumber()"
             (input)="onPhoneNumberChange($event)"
             [disabled]="isLoading()"
+=======
+              [(ngModel)]="phoneNumber"
+              [disabled]="isLoading()"
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
             />
           </div>
         </div>
@@ -79,8 +84,12 @@
             [class.error]="otpError()"
             placeholder="000000"
             maxlength="6"
+<<<<<<< HEAD
 [value]="otp()"
             (input)="onOtpChange($event)"
+=======
+            [(ngModel)]="otp"
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
             [disabled]="isLoading()"
           />
           @if (otpError()) {
@@ -102,7 +111,12 @@
             <div class="loading-spinner"></div>
             <span>Verifying...</span>
           } @else {
+<<<<<<< HEAD
             <span>Verify OTP</span>
+=======
+            <span class="material-symbols-outlined">Verify OTP</span>
+            
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
           }
         </button>
 
@@ -113,7 +127,12 @@
             </p>
           } @else {
             <button class="resend-button" (click)="onResendOTP()">
+<<<<<<< HEAD
               <span>Resend OTP</span>
+=======
+              <span class="material-symbols-outlined">Resend OTP</span>
+              
+>>>>>>> ff3a45c164d25325c387c30b2402b81dbad2e8aa
             </button>
           }
         </div>
