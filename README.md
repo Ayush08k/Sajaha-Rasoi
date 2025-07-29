@@ -10,7 +10,7 @@ This project is a submission for **Tutedude’s Web Development Hackathon 1.0 �
 ## 👥 Team
 
 - **Mohit Jangra**
-- **Ayush**
+- **Ayush Kumar**
 - **Deepika Bhardwaj**
 
 
