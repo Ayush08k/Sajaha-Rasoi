@@ -10,37 +10,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneNumber = signal(''); 
   otp = signal('');
   showOtpInput = signal(false); 
   isLoading = signal(false); 
-=======
-=======
->>>>>>> parent of 9d09627 (Firestore connected)
-=======
->>>>>>> parent of 9d09627 (Firestore connected)
-=======
->>>>>>> parent of ff3a45c (Merge pull request #1 from Ayush08k/authenticationAdd)
-export class LoginComponent {
-  phoneNumber = signal('');
-  otp = signal('');
-  showOtpInput = signal(false);
-  isLoading = signal(false);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of ff3a45c (Merge pull request #1 from Ayush08k/authenticationAdd)
-=======
->>>>>>> parent of 9d09627 (Firestore connected)
-=======
->>>>>>> parent of 9d09627 (Firestore connected)
-=======
->>>>>>> parent of ff3a45c (Merge pull request #1 from Ayush08k/authenticationAdd)
   countdown = signal(30);
   canResend = signal(true);
   otpError = signal('');
