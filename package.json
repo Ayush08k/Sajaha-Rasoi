@@ -29,6 +29,10 @@
     "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
     "@angular/ssr": "^20.1.1",
+<<<<<<< HEAD
+=======
+    "@tailwindcss/postcss": "^4.1.11",
+>>>>>>> parent of 5f8b687 (component is added)
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
